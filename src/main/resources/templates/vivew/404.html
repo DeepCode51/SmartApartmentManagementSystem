@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>智慧公寓系统</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+	<script type="text/javascript" src="layui/layui.js"></script>
+	<link rel="stylesheet" href="cop/css/mian.css">
+</head>
+<body class="lay-blog">
+		<div class="header">
+			<div class="header-wrap">
+				<h1 class="logo pull-left">
+					<a href="index.html">
+						<img src="images/logo.png" alt="" class="logo-img">
+						<img src="images/logo-text.png" alt="" class="logo-text">
+					</a>
+				</h1>
+				<form class="layui-form blog-seach pull-left" action="">
+					<div class="layui-form-item blog-sewrap">
+					    
+					</div>
+				</form>
+				<div class="blog-nav pull-right">
+					<ul class="layui-nav pull-left">
+						<li class="layui-nav-item "><a href="../family/viveindex.m">迎新</a></li>
+						<li class="layui-nav-item "><a href="../family/vivemessage.m">宿舍考评可视化</a></li>
+						<li class="layui-nav-item "><a href="../family/viveabout.m">公寓管理</a></li>
+						<li class="layui-nav-item layui-this"><a href="../family/vive404.m">登记管理</a></li>
+						<li class="layui-nav-item"><a href="../family/vivecomment.m">门禁出入</a></li>
+						<li class="layui-nav-item"><a href="../family/vivedetails.m">退宿离校</a></li>
+					</ul>
+					<a href="../family/vivelogin.m" class="personal pull-left">
+						<i class="layui-icon layui-icon-username"></i>
+					</a>
+				</div>
+				<div class="mobile-nav pull-right" id="mobile-nav">
+					<a href="javascript:;">
+						<i class="layui-icon layui-icon-more"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="container-wrap">
+
+			<okToolbar>
+				<button class="layui-btn" id="add" style="margin-top: 30px;">
+					<i class="layui-icon">&#xe61f;</i>添加
+				</button>
+			</okToolbar>
+			<table class="layui-hide" id="tableId" lay-filter="tableFilter"></table>
+			<script>
+				layui.use(['element', 'table', 'form', 'jquery'], function () {
+							const element = layui.element;
+							const form = layui.form;
+							const table = layui.table;
+							const $ = layui.jquery;
+							table.render({
+								elem: '#tableId',
+								url: 'userop/userlist.m',
+								limit: 10,
+								page: true,
+								cols: [
+									[
+										{field: 'id', title: 'id', width: '25%', sort: true, align: "center"},
+										{field: 'zhichu', title: '借钥匙', width: '15%', align: "center"},
+										{field: 'jiine', title: '晚出晚归', width: '15%', align: "center"},
+										{field: 'fangshi', title: '物品登记', width: '15%', align: "center"},
+										{field: 'didian', title: '访客登记', width: '15%', align: "center"},
+										{title: '操作', width: '16%', templet: '#operationTpl', align: 'center'}
+									]
+								],
+							});
+							table.on('tool(tableFilter)', function (obj) {
+								const data = obj.data;
+								const layEvent = obj.event;
+								if (layEvent === 'edit') {
+									layer.open({
+										title: '编辑登记',
+										type: 2,
+										shade: false,
+										maxmin: true,
+										shade: 0.5,
+										area: ['50%', '70%'],
+										content: '../family/userdit.m',
+										zIndex: layer.zIndex,
+										success: function (layer, index) {
+											var iframe = window['layui-layer-iframe' + index];
+											iframe.child(data)//调用子页面全局函数
+										}
+									});
+								} else if (layEvent === 'del') {
+									layer.confirm("确定要删除吗？", {skin: 'layui-layer-lan', icon: 2, title: '提示', anim: 6}, function (index) {
+										const id = {"id": data.id};
+										$.ajax({
+											url: 'userop/delMAdminById.m',
+											data: id,
+											dateType: 'json',
+											type: 'delete',
+											success: function (data) {
+												if (data.flag > 0) {
+													layer.msg("删除成功");
+													obj.del();
+												} else {
+													layer.msg("删除失败");
+												}
+											}
+										});
+									});
+								}
+							});
+							$("#add").click(function () {
+								layer.open({
+									title: '添加登记信息',
+									type: 2,
+									shade: false,
+									maxmin: true,
+									shade: 0.5,
+									area: ['50%', '70%'],
+									content: '../family/useradd.m"',
+									zIndex: layer.zIndex,
+									end: function () {
+										$(".layui-laypage-btn")[0].click();
+									}
+								});
+							});
+						}
+				);
+			</script>
+			<script type="text/html" id="operationTpl">
+				<a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+				<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del" style="margin-left: 20px;">删除</a>
+			</script>
+		</div>
+
+
+</body>
+</html>

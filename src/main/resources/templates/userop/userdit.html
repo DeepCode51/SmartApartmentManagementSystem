@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登记管理信息</title>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <script type="text/javascript" src="layui/layui.js"></script>
+</head>
+<body>
+<div class="ok-body">
+    <!--面包屑导航区域-->
+    <div class="ok-body-breadcrumb" style="margin: 30px 0px 0px 20px;">
+            <span class="layui-breadcrumb">
+                <a><cite>登记</cite></a>
+                <a><cite>列表</cite></a>
+				<a><cite>编辑登记</cite></a>
+            </span>
+    </div>
+    <!--form表单-->
+    <form class="layui-form layui-form-pane ok-form">
+        <input type="hidden" name="id" autocomplete="off" class="layui-input">
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">借钥匙</label>
+            <div class="layui-input-block">
+                <input type="text" name="zhichu" readOnly="true" placeholder="请输入借钥匙" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">晚出晚归</label>
+            <div class="layui-input-block">
+                <input type="text" name="jiine" placeholder="请输入晚出晚归" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">物品登记</label>
+            <div class="layui-input-block">
+                <input type="text" name="fangshi" placeholder="请输入物品登记" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">访客登记</label>
+            <div class="layui-input-block">
+                <input type="text" name="didian" placeholder="请输入访客登记" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 60px;">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="update">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    function child(data) {
+        layui.use(['element', 'form', 'jquery'], function () {
+            const element = layui.element;
+            const form = layui.form;
+            const $ = layui.jquery;
+            $("input[name='id']").val(data.id);
+            $("input[name='zhichu']").val(data.zhichu);
+            $("input[name='jiine']").val(data.jiine);
+            $("input[name='fangshi']").val(data.fangshi);
+            $("input[name='didian']").val(data.didian);
+            form.on('submit(update)', function (data) {
+                $.ajax({
+                    url: 'userop/userdit.m',
+                    dateType: 'json',
+                    type: 'put',
+                    data: data.field,
+                    success: function (data) {
+                        if (data.flag > 0) {
+                            layer.msg("修改成功！", {icon: 6, time: 1000, anim: 4}, function () {
+                                parent.layer.close(parent.layer.getFrameIndex(window.name));
+                                parent.location.reload();
+                            });
+                        } else {
+                            layer.msg("修改失败！")
+                        }
+                    }
+                });
+                return false;
+            });
+        })
+    }
+</script>
+</body>
+</html>

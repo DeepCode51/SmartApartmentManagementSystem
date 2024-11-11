@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>公寓管理列表</title>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <script type="text/javascript" src="layui/layui.js"></script>
+</head>
+<body>
+<div class="ok-body" style="padding: 20px 20px 20px 20px;">
+    <!--面包屑导航区域-->
+    <div class="ok-body-breadcrumb">
+            <span class="layui-breadcrumb">
+                <a><cite>公寓</cite></a>
+                <a><cite>列表</cite></a>
+            </span>
+        <a class="layui-btn layui-btn-small" href="javascript:location.replace(location.href);" style="float: right">
+            <i class="layui-icon layui-icon-refresh" style="font-size: 14px;">刷新</i>
+        </a>
+    </div>
+    <okToolbar>
+        <button class="layui-btn" id="add" style="margin-top: 30px;">
+            <i class="layui-icon">&#xe61f;</i>添加
+        </button>
+    </okToolbar>
+    <table class="layui-hide" id="tableId" lay-filter="tableFilter"></table>
+</div>
+<script>
+    layui.use(['element', 'table', 'form', 'jquery'], function () {
+            const element = layui.element;
+            const form = layui.form;
+            const table = layui.table;
+            const $ = layui.jquery;
+            table.render({
+                elem: '#tableId',
+                url: 'auser/keylist.m',
+                limit: 10,
+                page: true,
+                cols: [
+                    [
+                        {field: 'id', title: 'id', width: '25%', sort: true, align: "center"},
+                        {field: 'useradd', title: '入住查询', width: '15%', align: "center"},
+                        {field: 'useredit', title: '调换宿舍', width: '15%', align: "center"},
+                        {field: 'addis', title: '寒假留宿', width: '15%', align: "center"},
+                        {field: 'fangshi', title: '姓名', width: '15%', align: "center"},
+                        {title: '操作', width: '16%', templet: '#operationTpl', align: 'center'}
+                    ]
+                ],
+            });
+        table.on('tool(tableFilter)', function (obj) {
+            const data = obj.data;
+            const layEvent = obj.event;
+            if (layEvent === 'edit') {
+                layer.open({
+                    title: '编辑公寓',
+                    type: 2,
+                    shade: false,
+                    maxmin: true,
+                    shade: 0.5,
+                    area: ['50%', '70%'],
+                    content: '../family/keyedit.m',
+                    zIndex: layer.zIndex,
+                    success: function (layer, index) {
+                        var iframe = window['layui-layer-iframe' + index];
+                        iframe.child(data)//调用子页面全局函数
+                    }
+                });
+            } else if (layEvent === 'del') {
+                layer.confirm("确定要删除吗？", {skin: 'layui-layer-lan', icon: 2, title: '提示', anim: 6}, function (index) {
+                    const id = {"id": data.id};
+                    $.ajax({
+                        url: 'auser/delMAdminById.m',
+                        data: id,
+                        dateType: 'json',
+                        type: 'delete',
+                        success: function (data) {
+                            if (data.flag > 0) {
+                                layer.msg("删除成功");
+                                obj.del();
+                            } else {
+                                layer.msg("删除失败");
+                            }
+                        }
+                    });
+                });
+            }
+        });
+        $("#add").click(function () {
+            layer.open({
+                title: '添加公寓信息',
+                type: 2,
+                shade: false,
+                maxmin: true,
+                shade: 0.5,
+                area: ['50%', '70%'],
+                content: '../family/keyadd.m"',
+                zIndex: layer.zIndex,
+                end: function () {
+                    $(".layui-laypage-btn")[0].click();
+                }
+            });
+        });
+        }
+    );
+</script>
+<script type="text/html" id="operationTpl">
+    <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del" style="margin-left: 20px;">删除</a>
+</script>
+</body>
+</html>

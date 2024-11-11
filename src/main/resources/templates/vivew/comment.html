@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>智慧公寓系统</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+	<script type="text/javascript" src="layui/layui.js"></script>
+	<link rel="stylesheet" href="cop/css/mian.css">
+</head>
+<body class="lay-blog">
+		<div class="header">
+			<div class="header-wrap">
+				<h1 class="logo pull-left">
+					<a href="index.html">
+						<img src="images/logo.png" alt="" class="logo-img">
+						<img src="images/logo-text.png" alt="" class="logo-text">
+					</a>
+				</h1>
+				<form class="layui-form blog-seach pull-left" action="">
+					<div class="layui-form-item blog-sewrap">
+					    
+					</div>
+				</form>
+				<div class="blog-nav pull-right">
+					<ul class="layui-nav pull-left">
+						<li class="layui-nav-item  "><a href="../family/viveindex.m">迎新</a></li>
+						<li class="layui-nav-item "><a href="../family/vivemessage.m">宿舍考评可视化</a></li>
+						<li class="layui-nav-item "><a href="../family/viveabout.m">公寓管理</a></li>
+						<li class="layui-nav-item"><a href="../family/vive404.m">登记管理</a></li>
+						<li class="layui-nav-item layui-this"><a href="../family/vivecomment.m">门禁出入</a></li>
+						<li class="layui-nav-item"><a href="../family/vivedetails.m">退宿离校</a></li>
+					</ul>
+					<a href="../family/vivelogin.m" class="personal pull-left">
+						<i class="layui-icon layui-icon-username"></i>
+					</a>
+				</div>
+				<div class="mobile-nav pull-right" id="mobile-nav">
+					<a href="javascript:;">
+						<i class="layui-icon layui-icon-more"></i>
+					</a>
+				</div>
+			</div>
+
+		</div>
+		<div class="container-wrap">
+			<div class="container container-message container-details container-comment">
+					<div class="contar-wrap">
+						<div class="item">
+							<div class="item-box  layer-photos-demo1 layer-photos-demo">
+								<p>指“门”的禁止权限，是对“门"的戒备防范。这里的“门”，广义来说，包括能够通行的各种通道，包括人通行的门，车辆通行的门等。因此，门禁就包括了车辆门禁。在车场管理应用中，车辆门禁是车辆管理的一种重要手段。北魏 郦道元《水经注·谷水》：“ 曹子建尝行御街，犯门禁，以此见薄。” 宋 吴自牧《梦粱录·大内》：“门禁严甚，守把钤束，人无敢辄入仰视。” 明 叶盛《水东日记·记杀马顺等事》：“殊不知因大驾出后，门禁颇严。”</p>
+								<img src="images/item.png"
+								 alt="帅哥">
+							</div>
+						</div>
+					</div>
+			</div>
+			<okToolbar>
+				<button class="layui-btn" id="add" style="margin-top: 30px;">
+					<i class="layui-icon">&#xe61f;</i>添加
+				</button>
+			</okToolbar>
+			<table class="layui-hide" id="tableId" lay-filter="tableFilter"></table>
+			<script>
+				layui.use(['element', 'table', 'form', 'jquery'], function () {
+							const element = layui.element;
+							const form = layui.form;
+							const table = layui.table;
+							const $ = layui.jquery;
+							table.render({
+								elem: '#tableId',
+								url: 'oop/ooplist.m',
+								limit: 10,
+								page: true,
+								cols: [
+									[
+										{field: 'id', title: 'id', width: '10%', sort: true, align: "center"},
+										{field: 'names', title: '出入管控', width: '25%', align: "center"},
+										{field: 'fangshi', title: '安全保障', width: '25%', align: "center"},
+										{field: 'renshu', title: '数据记录', width: '25%', align: "center"},
+										{title: '操作', width: '15%', templet: '#operationTpl', align: 'center'}
+									]
+								],
+							});
+							table.on('tool(tableFilter)', function (obj) {
+								const data = obj.data;
+								const layEvent = obj.event;
+								if (layEvent === 'edit') {
+									layer.open({
+										title: '编辑门禁出入',
+										type: 2,
+										shade: false,
+										maxmin: true,
+										shade: 0.5,
+										area: ['50%', '70%'],
+										content: '../family/oopedit.m',
+										zIndex: layer.zIndex,
+										success: function (layer, index) {
+											var iframe = window['layui-layer-iframe' + index];
+											iframe.child(data)//调用子页面全局函数
+										}
+									});
+								} else if (layEvent === 'del') {
+									layer.confirm("确定要删除吗？", {skin: 'layui-layer-lan', icon: 2, title: '提示', anim: 6}, function (index) {
+										const id = {"id": data.id};
+										$.ajax({
+											url: 'oop/delMAdminById.m',
+											data: id,
+											dateType: 'json',
+											type: 'delete',
+											success: function (data) {
+												if (data.flag > 0) {
+													layer.msg("删除成功");
+													obj.del();
+												} else {
+													layer.msg("删除失败");
+												}
+											}
+										});
+									});
+								}
+							});
+							$("#add").click(function () {
+								layer.open({
+									title: '添加门禁出入',
+									type: 2,
+									shade: false,
+									maxmin: true,
+									shade: 0.5,
+									area: ['50%', '70%'],
+									content: '../family/oopadd.m"',
+									zIndex: layer.zIndex,
+									end: function () {
+										$(".layui-laypage-btn")[0].click();
+									}
+								});
+							});
+						}
+				);
+			</script>
+			<script type="text/html" id="operationTpl">
+				<a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+				<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del" style="margin-left: 20px;">删除</a>
+			</script>
+		</div>
+
+</body>
+</html>

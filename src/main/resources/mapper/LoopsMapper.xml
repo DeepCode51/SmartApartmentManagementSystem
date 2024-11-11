@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.family.mapper.LoopsMapper">
+
+    <resultMap type="com.family.pojo.Loops" id="BaseResultMap">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="tuisu" column="tuisu" jdbcType="VARCHAR"/>
+        <result property="lixiao" column="lixiao" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Loops">
+        select id,tuisu,lixiao from loops
+    </sql>
+    <select id="keeplist" resultMap="BaseResultMap"  parameterType="com.family.pojo.Loops">
+        <include refid="Loops"></include>
+    </select>
+    <insert id="saveMAdmin" parameterType="com.family.pojo.Loops">
+        insert into loops(tuisu,lixiao) values (#{tuisu},#{lixiao})
+    </insert>
+    <update id="editMAdmin" parameterType="com.family.pojo.Loops">
+        update loops set tuisu=#{tuisu},lixiao=#{lixiao} where id=#{id}
+    </update>
+    <delete id="delMAdminById" parameterType="int">
+        delete from loops where id=#{id}
+    </delete>
+</mapper>

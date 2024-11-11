@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.family.mapper.KeepMapper">
+
+    <resultMap type="com.family.pojo.Keep" id="BaseResultMap">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="fap" column="fap" jdbcType="VARCHAR"/>
+        <result property="agea" column="agea" jdbcType="VARCHAR"/>
+        <result property="kop" column="kop" jdbcType="VARCHAR"/>
+        <result property="xinse" column="xinse" jdbcType="VARCHAR"/>
+        <result property="ipho" column="ipho" jdbcType="VARCHAR"/>
+        <result property="xian" column="xian" jdbcType="VARCHAR"/>
+        <result property="wu" column="wu" jdbcType="VARCHAR"/>
+        <result property="ipo" column="ipo" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Keep">
+        select id,fap,agea,kop,xinse,ipho,xian,wu,ipo from keep
+    </sql>
+    <select id="keeplist" resultMap="BaseResultMap"  parameterType="com.family.pojo.Keep">
+        <include refid="Keep"></include>
+    </select>
+    <insert id="saveMAdmin" parameterType="com.family.pojo.Keep">
+        insert into keep(fap,agea,kop,xinse,ipho,xian,wu,ipo) values (#{fap},#{agea},#{kop},#{xinse},#{ipho},#{xian},#{wu},#{ipo})
+    </insert>
+    <update id="editMAdmin" parameterType="com.family.pojo.Keep">
+        update keep set fap=#{fap},agea=#{agea},kop=#{kop},xinse=#{xinse},ipho=#{ipho},xian=#{xian},wu=#{wu},ipo=#{ipo}where id=#{id}
+    </update>
+    <delete id="delMAdminById" parameterType="int">
+        delete from keep where id=#{id}
+    </delete>
+</mapper>

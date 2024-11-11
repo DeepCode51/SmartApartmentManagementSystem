@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.family.mapper.OopMapper">
+
+    <resultMap type="com.family.pojo.Oop" id="BaseResultMap">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="names" column="names" jdbcType="VARCHAR"/>
+        <result property="fangshi" column="fangshi" jdbcType="VARCHAR"/>
+        <result property="renshu" column="renshu" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Oop">
+        select id,names,fangshi,renshu from oop
+    </sql>
+    <select id="keeplist" resultMap="BaseResultMap"  parameterType="com.family.pojo.Oop">
+        <include refid="Oop"></include>
+    </select>
+    <insert id="saveMAdmin" parameterType="com.family.pojo.Oop">
+        insert into oop(names,fangshi,renshu) values (#{names},#{fangshi},#{renshu})
+    </insert>
+    <update id="editMAdmin" parameterType="com.family.pojo.Oop">
+        update oop set names=#{names},fangshi=#{fangshi},renshu=#{renshu} where id=#{id}
+    </update>
+    <delete id="delMAdminById" parameterType="int">
+        delete from oop where id=#{id}
+    </delete>
+</mapper>

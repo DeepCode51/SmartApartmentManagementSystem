@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加迎新系统</title>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <script type="text/javascript" src="layui/layui.js"></script>
+</head>
+<body>
+<div class="ok-body">
+    <!--面包屑导航区域-->
+    <div class="ok-body-breadcrumb" style="margin: 30px 0px 0px 20px;">
+            <span class="layui-breadcrumb">
+                <a><cite>迎新</cite></a>
+                <a><cite>列表</cite></a>
+				<a><cite>信息</cite></a>
+            </span>
+    </div>
+    <!--form表单-->
+    <form class="layui-form layui-form-pane ok-form">
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">新生选房</label>
+            <div class="layui-input-block">
+                <input type="text" name="fap"  placeholder="请输入新生选房" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">新生分房</label>
+            <div class="layui-input-block">
+                <input type="text" name="agea" placeholder="请输入新生分房" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">到校登记</label>
+            <div class="layui-input-block">
+                <input type="text" name="kop" placeholder="请输入到校登记" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">迎新问答</label>
+            <div class="layui-input-block">
+                <input type="text" name="xinse" placeholder="请输入迎新问答" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">手机选号</label>
+            <div class="layui-input-block">
+                <input type="text" name="ipho" placeholder="请输入手机选号" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">线上充值</label>
+            <div class="layui-input-block">
+                <input type="text" name="xian" placeholder="请输入线上充值" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">生活用品预定</label>
+            <div class="layui-input-block">
+                <input type="text" name="wu" placeholder="请输入生活用品预定" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">新生礼包</label>
+            <div class="layui-input-block">
+                <input type="text" name="ipo" placeholder="请输入新生礼包" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 60px;">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="add">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['element', 'form', 'jquery',], function () {
+        const element = layui.element;
+        const form = layui.form;
+        const $ = layui.jquery;
+        form.on('submit(add)', function (data) {
+            $.ajax({
+                url: 'keep/keepadd.m',
+                dateType: 'json',
+                type: 'post',
+                data: data.field,
+                success: function (data) {
+                    if (data.flag > 0) {
+                        layer.msg("添加成功！", {icon: 6, time: 1000, anim: 4}, function () {
+                            parent.layer.close(parent.layer.getFrameIndex(window.name));
+                            parent.location.reload();
+                        });
+                    } else {
+                        layer.msg("添加失败,系统已经存在")
+                    }
+                }
+            });
+            return false;
+        });
+    })
+</script>
+</body>
+</html>

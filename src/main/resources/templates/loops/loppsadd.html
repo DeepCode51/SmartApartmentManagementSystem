@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加退宿离校</title>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <script type="text/javascript" src="layui/layui.js"></script>
+</head>
+<body>
+<div class="ok-body">
+    <!--面包屑导航区域-->
+    <div class="ok-body-breadcrumb" style="margin: 30px 0px 0px 20px;">
+            <span class="layui-breadcrumb">
+                <a><cite>退宿离校</cite></a>
+                <a><cite>列表</cite></a>
+				<a><cite>信息</cite></a>
+            </span>
+    </div>
+    <!--form表单-->
+    <form class="layui-form layui-form-pane ok-form">
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">毕业退宿</label>
+            <div class="layui-input-block">
+                <input type="text" name="tuisu"  placeholder="请输入毕业退宿" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 30px;">
+            <label class="layui-form-label">毕业离校</label>
+            <div class="layui-input-block">
+                <input type="text" name="lixiao" placeholder="请输入毕业离校" autocomplete="off" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 60px;">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="add">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['element', 'form', 'jquery',], function () {
+        const element = layui.element;
+        const form = layui.form;
+        const $ = layui.jquery;
+        form.on('submit(add)', function (data) {
+            $.ajax({
+                url: 'loop/loppsadd.m',
+                dateType: 'json',
+                type: 'post',
+                data: data.field,
+                success: function (data) {
+                    if (data.flag > 0) {
+                        layer.msg("添加成功！", {icon: 6, time: 1000, anim: 4}, function () {
+                            parent.layer.close(parent.layer.getFrameIndex(window.name));
+                            parent.location.reload();
+                        });
+                    } else {
+                        layer.msg("添加失败,已经存在")
+                    }
+                }
+            });
+            return false;
+        });
+    })
+</script>
+</body>
+</html>

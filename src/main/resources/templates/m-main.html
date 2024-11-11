@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>智慧公寓系统</title>
+    <link rel="Shortcut Icon" href="images/icon.png" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout  layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">智慧公寓系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav  layui-layout-left">
+            <li class="layui-nav-item layui-this"><a href="">概念台</a></li>
+        </ul>
+        <ul class="layui-nav layui-bg-molv layui-layout-right">
+            <li class="layui-nav-item"><a href="javascript:;">
+                <span style="font-size: 13px;">欢迎您&thinsp;:&thinsp; <span th:text="${session.mname}" style="font-size: 13px;"></span>&thinsp;管理员</span> </a>
+                <dl class="layui-nav-child">
+                    <dd>
+                        <a href="">基本资料</a>
+                    </dd>
+                    <dd>
+                        <a href="">安全设置</a>
+                    </dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="../family/login.m" id="signOut">退出系统</a></li>
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-#f2f2f2">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="../family/mhomepage.m" class="layui-this" target="menuIframe">首页</a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">登录管理员</a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="../family/adminlist.m" target="menuIframe">管理员列表</a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">用户登录</a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="../family/userelist.m" target="menuIframe">用户列表</a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">模块分支</a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="../family/keeplist.m" target="menuIframe">迎新系统</a>
+                        </dd>
+                        <dd>
+                            <a href="../family/keylist.m" target="menuIframe">公寓管理</a>
+                        </dd>
+                        <dd>
+                            <a href="../family/welcome1.m" target="menuIframe">宿舍考评可视化</a>
+                        </dd>
+                        <dd>
+                            <a href="../family/userlist.m" target="menuIframe">登记管理</a>
+                        </dd>
+                        <dd>
+                            <a href="../family/ooplist.m" target="menuIframe">门禁出入</a>
+                        </dd>
+                        <dd>
+                            <a href="../family/loopslist.m" target="menuIframe">退宿离校</a>
+                        </dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div>
+            <iframe src="../family/mhomepage.m" name="menuIframe" frameborder="0"
+                    scrolling="auto" width="100%" height="690px"></iframe>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['layer', 'element', 'jquery'], function () {
+        const layer = layui.layer;
+        const element = layui.element;
+        const $ = layui.jquery;
+        $(".layui-body").css("bottom", 0);
+        $("#signOut").on('click', function () {
+            layer.confirm("确定要离开管理员页面吗？", {
+                skin: 'layui-layer-lan',
+                icon: 2,
+                title: '提示',
+                anim: 6
+            }, function (index) {
+                $.ajax({
+                    url: 'admin/signOut.m',
+                    dateType: 'json',
+                    type: 'post',
+                    success: function (data) {
+                        if (data.signOut == "signOut") {
+                            layer.msg("退出系统");
+                            setTimeout(function () {
+                                parent.location.reload();
+                                window.location = "../family/login.m";
+                            }, 1000);
+                        } else {
+
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
+</body>
+</html>

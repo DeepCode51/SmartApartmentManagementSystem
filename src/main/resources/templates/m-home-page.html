@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-carousel" id="home" style="height: 100%">
+    <div carousel-item>
+        <div><img src="images/login-m-bg.png"></div>
+    </div>
+</div>
+<script>
+    layui.use('carousel', function () {
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#home'
+            , width: '100%' //设置容器宽度
+            , arrow: 'always' //始终显示箭头
+            , full: true
+        });
+    });
+</script>
+</body>
+</html>

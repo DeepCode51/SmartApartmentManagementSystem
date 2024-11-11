@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>智慧公寓系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <link rel="stylesheet" href="cop/css/mian.css">
+</head>
+<body class="lay-blog">
+<div class="header">
+    <div class="header-wrap">
+        <h1 class="logo pull-left">
+            <a href="index.html">
+                <img src="images/logo.png" alt="" class="logo-img">
+                <img src="images/logo-text.png" alt="" class="logo-text">
+            </a>
+        </h1>
+        <form class="layui-form blog-seach pull-left" action="">
+            <div class="layui-form-item blog-sewrap">
+            </div>
+        </form>
+        <div class="blog-nav pull-right">
+            <ul class="layui-nav pull-left">
+                <li class="layui-nav-item layui-this "><a href="../family/viveindex.m">迎新</a></li>
+                <li class="layui-nav-item "><a href="../family/vivemessage.m">宿舍考评可视化</a></li>
+                <li class="layui-nav-item "><a href="../family/viveabout.m">公寓管理</a></li>
+                <li class="layui-nav-item"><a href="../family/vive404.m">登记管理</a></li>
+                <li class="layui-nav-item"><a href="../family/vivecomment.m">门禁出入</a></li>
+                <li class="layui-nav-item"><a href="../family/vivedetails.m">退宿离校</a></li>
+            </ul>
+            <a href="../family/vivelogin.m" class="personal pull-left">
+                <i class="layui-icon layui-icon-username"></i>
+            </a>
+        </div>
+        <div class="mobile-nav pull-right" id="mobile-nav">
+            <a href="javascript:;">
+                <i class="layui-icon layui-icon-more"></i>
+            </a>
+        </div>
+    </div>
+
+</div>
+<div class="container-wrap">
+    <div class="container">
+        <div class="contar-wrap">
+            <h4 class="item-title">
+                <p><i class="layui-icon layui-icon-speaker"></i>公告：<span>欢迎来到我的智慧公寓系统</span></p>
+            </h4>
+            <div class="item">
+                <div class="item-box  layer-photos-demo1 layer-photos-demo">
+                    <h3><a href="details.html">公寓：公共寓所，分为商业公寓和职工公寓。是一种商业或地产投资中的居住形式，外形一般中规中矩，每层楼内有若干个套房和公共的走廊、厕所和浴室等，主要方便办公居住和对外租赁之用。</a>
+                    </h3>
+                    <h5>发布于：<span>用户</span></h5>
+                    <p>
+                        公寓是商业地产投资中最为广泛的一种地产形式。公寓式住宅最早是舶来品，相对于独院独户的别墅，更为经济实用。早期大城市的公寓式住宅都是高层大楼，每一层内有若干单户独用的套房，包括卧室、起居室、客厅、浴室、厕所、厨房等等，主要供当时中等收入的高级职员、政府公务员居住；还有一部分附设于旅馆酒店之内，供一些常常往来的中外客商及其家眷短期租用。公寓屋又可细分为排房(Town
+                        House)、单元公寓屋(Condo)、股东屋(Co-Op)和出租屋(Apartment)。排房和单元公寓屋的特点是拥有房屋和土地的部分产权和使用权，但必须受到管理部门的约束，并要交付一定数量的管理费；股东屋的特点是个人不拥有任何产权，仅拥有其中一部分股权和使用权，产权属于公司，出让时仅出让股份，而不出让产权；公寓屋的特点是拥有者大部分都是投资人或投资单位，主要目的是收取租金。</p>
+                    <img src="images/item.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--列表-->
+    <okToolbar>
+        <button class="layui-btn" id="add" style="margin-top: 30px;">
+            <i class="layui-icon">&#xe61f;</i>添加
+        </button>
+    </okToolbar>
+    <table class="layui-hide" id="tableId" lay-filter="tableFilter"></table>
+</div>
+    <script>
+        layui.use(['element', 'table', 'form', 'jquery'], function () {
+                const element = layui.element;
+                const form = layui.form;
+                const table = layui.table;
+                const $ = layui.jquery;
+                table.render({
+                    elem: '#tableId',
+                    url: 'keep/keeplist.m',
+                    limit: 10,
+                    page: true,
+                    cols: [
+                        [
+                            {field: 'id', title: 'id', width: '5%', sort: true, align: "center"},
+                            {field: 'fap', title: '新生选房', width: '10%', align: "center"},
+                            {field: 'agea', title: '新生分房', width: '10%', align: "center"},
+                            {field: 'kop', title: '到校登记', width: '10%', align: "center"},
+                            {field: 'xinse', title: '迎新问答', width: '10%', align: "center"},
+                            {field: 'ipho', title: '手机选号', width: '10%', align: "center"},
+                            {field: 'xian', title: '线上充值', width: '10%', align: "center"},
+                            {field: 'wu', title: '生活用品预定', width: '10%', align: "center"},
+                            {field: 'ipo', title: '新生礼包', width: '10%', align: "center"},
+                            {title: '操作', width: '16%', templet: '#operationTpl', align: 'center'}
+                        ]
+                    ],
+                });
+                table.on('tool(tableFilter)', function (obj) {
+                    const data = obj.data;
+                    const layEvent = obj.event;
+                    if (layEvent === 'edit') {
+                        layer.open({
+                            title: '编辑迎新',
+                            type: 2,
+                            shade: false,
+                            maxmin: true,
+                            shade: 0.5,
+                            area: ['50%', '70%'],
+                            content: '../family/keepedit.m',
+                            zIndex: layer.zIndex,
+                            success: function (layer, index) {
+                                var iframe = window['layui-layer-iframe' + index];
+                                iframe.child(data)//调用子页面全局函数
+                            }
+                        });
+                    } else if (layEvent === 'del') {
+                        layer.confirm("确定要删除吗？", {skin: 'layui-layer-lan', icon: 2, title: '提示', anim: 6}, function (index) {
+                            const id = {"id": data.id};
+                            $.ajax({
+                                url: 'keep/delMAdminById.m',
+                                data: id,
+                                dateType: 'json',
+                                type: 'delete',
+                                success: function (data) {
+                                    if (data.flag > 0) {
+                                        layer.msg("删除成功");
+                                        obj.del();
+                                    } else {
+                                        layer.msg("删除失败");
+                                    }
+                                }
+                            });
+                        });
+                    }
+                });
+                $("#add").click(function () {
+                    layer.open({
+                        title: '添加迎新信息',
+                        type: 2,
+                        shade: false,
+                        maxmin: true,
+                        shade: 0.5,
+                        area: ['50%', '70%'],
+                        content: '../family/keepadd.m"',
+                        zIndex: layer.zIndex,
+                        end: function () {
+                            $(".layui-laypage-btn")[0].click();
+                        }
+                    });
+                });
+            }
+        );
+    </script>
+    <script type="text/html" id="operationTpl">
+        <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del" style="margin-left: 20px;">删除</a>
+    </script>
+</body>
+</html>

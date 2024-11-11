@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.family.mapper.UseropMapper">
+
+    <resultMap type="com.family.pojo.Userop" id="BaseResultMap">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="zhichu" column="zhichu" jdbcType="VARCHAR"/>
+        <result property="jiine" column="jiine" jdbcType="VARCHAR"/>
+        <result property="fangshi" column="fangshi" jdbcType="VARCHAR"/>
+        <result property="didian" column="didian" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Userop">
+        select id,zhichu,jiine,fangshi,didian from userop
+    </sql>
+    <select id="keeplist" resultMap="BaseResultMap"  parameterType="com.family.pojo.Userop">
+        <include refid="Userop"></include>
+    </select>
+    <insert id="saveMAdmin" parameterType="com.family.pojo.Userop">
+        insert into userop(zhichu,jiine,fangshi,didian) values (#{zhichu},#{jiine},#{fangshi},#{didian})
+    </insert>
+    <update id="editMAdmin" parameterType="com.family.pojo.Userop">
+        update userop set zhichu=#{zhichu},jiine=#{jiine},fangshi=#{fangshi},didian=#{didian} where id=#{id}
+    </update>
+    <delete id="delMAdminById" parameterType="int">
+        delete from userop where id=#{id}
+    </delete>
+</mapper>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>智慧公寓系统</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+	<script type="text/javascript" src="layui/layui.js"></script>
+	<link rel="stylesheet" href="cop/css/mian.css">
+</head>
+<body class="lay-blog">
+		<div class="header">
+			<div class="header-wrap">
+				<h1 class="logo pull-left">
+					<a href="index.html">
+						<img src="images/logo.png" alt="" class="logo-img">
+						<img src="images/logo-text.png" alt="" class="logo-text">
+					</a>
+				</h1>
+				<form class="layui-form blog-seach pull-left" action="">
+					<div class="layui-form-item blog-sewrap">
+					</div>
+				</form>
+				<div class="blog-nav pull-right">
+					<ul class="layui-nav pull-left">
+						<li class="layui-nav-item  "><a href="../family/viveindex.m">迎新</a></li>
+						<li class="layui-nav-item "><a href="../family/vivemessage.m">宿舍考评可视化</a></li>
+						<li class="layui-nav-item layui-this "><a href="../family/viveabout.m">公寓管理</a></li>
+						<li class="layui-nav-item"><a href="../family/vive404.m">登记管理</a></li>
+						<li class="layui-nav-item"><a href="../family/vivecomment.m">门禁出入</a></li>
+						<li class="layui-nav-item"><a href="../family/vivedetails.m">退宿离校</a></li>
+					</ul>
+					<a href="../family/vivelogin.m" class="personal pull-left">
+						<i class="layui-icon layui-icon-username"></i>
+					</a>
+				</div>
+				<div class="mobile-nav pull-right" id="mobile-nav">
+					<a href="javascript:;">
+						<i class="layui-icon layui-icon-more"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="container-wrap">
+			<div class="container container-message container-details container-about">
+					<div class="contar-wrap">
+						<div class="item">
+							<div class="item-box">
+								<h3>关于</h3>
+								<p>公寓普遍的特点是位置属于中心地段，一般以小户型全装修出现。居住人群主要以长住的商务客群为主，看重的是便利的位置和准酒店式的居住体验，同时比酒店低的租金。但也有极个别的是不同的产品，如上海的王子晶品，是大户型超豪华的产品，但是客群只是层次更高，以家庭一起过来居住的长住商务客。这类人群通常只是住个一年半载的，所以对于酒店式的享受很在乎，同时对于有无燃气供应，水电是否平价并不在乎。由于带有部分的投资属性，所以小户型，低总价就是很重要的特点。</p>
+							</div>
+						</div>			
+					</div>
+			</div>
+			<okToolbar>
+				<button class="layui-btn" id="add" style="margin-top: 30px;">
+					<i class="layui-icon">&#xe61f;</i>添加
+				</button>
+			</okToolbar>
+			<table class="layui-hide" id="tableId" lay-filter="tableFilter"></table>
+		</div>
+		<script>
+			layui.use(['element', 'table', 'form', 'jquery'], function () {
+						const element = layui.element;
+						const form = layui.form;
+						const table = layui.table;
+						const $ = layui.jquery;
+						table.render({
+							elem: '#tableId',
+							url: 'auser/keylist.m',
+							limit: 10,
+							page: true,
+							cols: [
+								[
+									{field: 'id', title: 'id', width: '25%', sort: true, align: "center"},
+									{field: 'useradd', title: '入住查询', width: '15%', align: "center"},
+									{field: 'useredit', title: '调换宿舍', width: '15%', align: "center"},
+									{field: 'addis', title: '寒假留宿', width: '15%', align: "center"},
+									{field: 'fangshi', title: '姓名', width: '15%', align: "center"},
+									{title: '操作', width: '16%', templet: '#operationTpl', align: 'center'}
+								]
+							],
+						});
+						table.on('tool(tableFilter)', function (obj) {
+							const data = obj.data;
+							const layEvent = obj.event;
+							if (layEvent === 'edit') {
+								layer.open({
+									title: '编辑公寓',
+									type: 2,
+									shade: false,
+									maxmin: true,
+									shade: 0.5,
+									area: ['50%', '70%'],
+									content: '../family/keyedit.m',
+									zIndex: layer.zIndex,
+									success: function (layer, index) {
+										var iframe = window['layui-layer-iframe' + index];
+										iframe.child(data)//调用子页面全局函数
+									}
+								});
+							} else if (layEvent === 'del') {
+								layer.confirm("确定要删除吗？", {skin: 'layui-layer-lan', icon: 2, title: '提示', anim: 6}, function (index) {
+									const id = {"id": data.id};
+									$.ajax({
+										url: 'auser/delMAdminById.m',
+										data: id,
+										dateType: 'json',
+										type: 'delete',
+										success: function (data) {
+											if (data.flag > 0) {
+												layer.msg("删除成功");
+												obj.del();
+											} else {
+												layer.msg("删除失败");
+											}
+										}
+									});
+								});
+							}
+						});
+						$("#add").click(function () {
+							layer.open({
+								title: '添加公寓信息',
+								type: 2,
+								shade: false,
+								maxmin: true,
+								shade: 0.5,
+								area: ['50%', '70%'],
+								content: '../family/keyadd.m"',
+								zIndex: layer.zIndex,
+								end: function () {
+									$(".layui-laypage-btn")[0].click();
+								}
+							});
+						});
+					}
+			);
+		</script>
+		<script type="text/html" id="operationTpl">
+			<a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+			<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del" style="margin-left: 20px;">删除</a>
+		</script>
+
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>智慧公寓系统</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+	<script type="text/javascript" src="layui/layui.js"></script>
+	<link rel="stylesheet" href="cop/css/mian.css">
+</head>
+<body class="lay-blog">
+		<div class="header">
+			<div class="header-wrap">
+				<h1 class="logo pull-left">
+					<a href="index.html">
+						<img src="images/logo.png" alt="" class="logo-img">
+						<img src="images/logo-text.png" alt="" class="logo-text">
+					</a>
+				</h1>
+				<form class="layui-form blog-seach pull-left" action="">
+					<div class="layui-form-item blog-sewrap">
+					    
+					</div>
+				</form>
+				<div class="blog-nav pull-right">
+					<ul class="layui-nav pull-left">
+						<li class="layui-nav-item  "><a href="../family/viveindex.m">迎新</a></li>
+						<li class="layui-nav-item "><a href="../family/vivemessage.m">宿舍考评可视化</a></li>
+						<li class="layui-nav-item "><a href="../family/viveabout.m">公寓管理</a></li>
+						<li class="layui-nav-item"><a href="../family/vive404.m">登记管理</a></li>
+						<li class="layui-nav-item"><a href="../family/vivecomment.m">门禁出入</a></li>
+						<li class="layui-nav-item layui-this"><a href="../family/vivedetails.m">退宿离校</a></li>
+					</ul>
+					<a href="../family/vivelogin.m" class="personal pull-left">
+						<i class="layui-icon layui-icon-username"></i>
+					</a>
+				</div>
+				<div class="mobile-nav pull-right" id="mobile-nav">
+					<a href="javascript:;">
+						<i class="layui-icon layui-icon-more"></i>
+					</a>
+				</div>
+			</div>
+
+		</div>
+		<div class="container-wrap">
+			<div class="container container-message container-details">
+					<div class="contar-wrap">
+						<div class="item">
+							<div class="item-box  layer-photos-demo1 layer-photos-demo">
+								<h3><a href="details.html">离校</a></h3>
+								<h5>发布于：<span>用户</span></h5>
+								<p>办理流程 （一）尚未交纳住宿费的同学，请到财务处补交住宿费，否则不予办理退宿手续。 （二）学生本人持《离校手续单》到所住公寓楼办理退宿。 （三）管理员验收房间公共物品，合格后，签发《退宿合格单》。 （四）持《退宿合格单》、钥匙、《住宿证》到公寓楼值班室管理员处办理。 （五）已办理退宿手续的毕业生持《离校手续单》、《校外住宿申请表》到35号楼114房间办理相关手续。</p>
+								<img src="images/item.png" alt="">
+							</div>
+						</div>
+						<div id="LAY-msg-box">
+							<div class="info-item">
+								<img class="info-img" src="images/info-img.png" alt="">
+								<div class="info-text">
+									<p class="title count">
+										<span class="name">一片空白</span>
+										<span class="info-img like"><i class="layui-icon layui-icon-praise"></i>5.8万</span>
+									</p>
+									<p class="info-intr">父爱如山，不善表达。回想十多年前，总记得父亲有个
+										宽厚的肩膀，小小的自己跨坐在上面，越过人山人海去看更广阔的天空，那
+										个时候期望自己有一双翅膀，能够像鸟儿一样飞得高，看得远。虽然父亲有
+										时会和自己开玩笑，但在做错事的时候会受到严厉的训斥。父亲有双粗糙的大手掌。</p>
+								</div>
+							</div>
+						</div>
+					</div>
+			</div>
+			<okToolbar>
+				<button class="layui-btn" id="add" style="margin-top: 30px;">
+					<i class="layui-icon">&#xe61f;</i>添加
+				</button>
+			</okToolbar>
+			<table class="layui-hide" id="tableId" lay-filter="tableFilter"></table>
+			<script>
+				layui.use(['element', 'table', 'form', 'jquery'], function () {
+							const element = layui.element;
+							const form = layui.form;
+							const table = layui.table;
+							const $ = layui.jquery;
+							table.render({
+								elem: '#tableId',
+								url: 'loop/loopslist.m',
+								limit: 10,
+								page: true,
+								cols: [
+									[
+										{field: 'id', title: 'id', width: '20%', sort: true, align: "center"},
+										{field: 'tuisu', title: '毕业退宿', width: '25%', align: "center"},
+										{field: 'lixiao', title: '毕业离校', width: '25%', align: "center"},
+										{title: '操作', width: '20%', templet: '#operationTpl', align: 'center'}
+									]
+								],
+							});
+							table.on('tool(tableFilter)', function (obj) {
+								const data = obj.data;
+								const layEvent = obj.event;
+								if (layEvent === 'edit') {
+									layer.open({
+										title: '编辑退宿离校',
+										type: 2,
+										shade: false,
+										maxmin: true,
+										shade: 0.5,
+										area: ['50%', '70%'],
+										content: '../family/loopsedit.m',
+										zIndex: layer.zIndex,
+										success: function (layer, index) {
+											var iframe = window['layui-layer-iframe' + index];
+											iframe.child(data)//调用子页面全局函数
+										}
+									});
+								} else if (layEvent === 'del') {
+									layer.confirm("确定要删除吗？", {skin: 'layui-layer-lan', icon: 2, title: '提示', anim: 6}, function (index) {
+										const id = {"id": data.id};
+										$.ajax({
+											url: 'loop/delMAdminById.m',
+											data: id,
+											dateType: 'json',
+											type: 'delete',
+											success: function (data) {
+												if (data.flag > 0) {
+													layer.msg("删除成功");
+													obj.del();
+												} else {
+													layer.msg("删除失败");
+												}
+											}
+										});
+									});
+								}
+							});
+							$("#add").click(function () {
+								layer.open({
+									title: '添加退宿离校',
+									type: 2,
+									shade: false,
+									maxmin: true,
+									shade: 0.5,
+									area: ['50%', '70%'],
+									content: '../family/loppsadd.m"',
+									zIndex: layer.zIndex,
+									end: function () {
+										$(".layui-laypage-btn")[0].click();
+									}
+								});
+							});
+						}
+				);
+			</script>
+			<script type="text/html" id="operationTpl">
+				<a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+				<a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del" style="margin-left: 20px;">删除</a>
+			</script>
+		</div>
+</body>
+</html>

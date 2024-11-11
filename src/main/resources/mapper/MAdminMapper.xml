@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.family.mapper.MAdminMapper">
+
+    <resultMap type="com.family.pojo.MAdmin" id="BaseResultMap">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="mname" column="mname" jdbcType="VARCHAR"/>
+        <result property="pass" column="pass" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="m_admin">
+        select id,mname,pass from m_admin
+    </sql>
+    <select id="adminLogin" resultMap="BaseResultMap" parameterType="com.family.pojo.MAdmin">
+        <include refid="m_admin"></include>
+        where mname=#{mname}
+        and
+        pass=#{pass}
+    </select>
+    <select id="mAdminList" resultType="com.family.pojo.MAdmin">
+        <include refid="m_admin"></include>
+    </select>
+    <insert id="saveMAdmin" parameterType="com.family.pojo.MAdmin">
+        insert into m_admin(mname,pass) values (#{mname},#{pass})
+    </insert>
+    <update id="editMAdmin" parameterType="com.family.pojo.MAdmin">
+        update m_admin set mname=#{mname},pass=#{pass} where id=#{id}
+    </update>
+    <delete id="delMAdminById" parameterType="int">
+        delete from m_admin where id=#{id}
+    </delete>
+</mapper>
